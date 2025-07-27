@@ -1,0 +1,30 @@
+name: 'Build'
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Use Node.js LTS
+      uses: actions/setup-node@v4
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+    - name: Install dependencies
+      run: pnpm i
+    - name: Build
+      run: pnpm run build
+    - name: Upload packages build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: publish.chrome.zip
+        path: publish.chrome.zip
+        retention-days: 1
